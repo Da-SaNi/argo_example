@@ -1,31 +1,28 @@
-apiVersion: v1
-items:
-- apiVersion: argoproj.io/v1alpha1
-  kind: Rollout
-  metadata:
-    generation: 9
-    name: rollout-bluegreen
-    namespace: default
-  spec:
-    replicas: 2
-    revisionHistoryLimit: 2
-    selector:
-      matchLabels:
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollout-bluegreen
+  namespace: default
+spec:
+  replicas: 2
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: rollout-bluegreen
+  strategy:
+    blueGreen:
+      activeService: rollout-bluegreen-active
+      previewService: rollout-bluegreen-preview
+      autoPromotionEnabled: true
+  template:
+    metadata:
+      labels:
         app: rollout-bluegreen
-    strategy:
-      blueGreen:
-        activeService: rollout-bluegreen-active
-        previewService: rollout-bluegreen-preview
-        autoPromotionEnabled: true
-    template:
-      metadata:
-        labels:
-          app: rollout-bluegreen
-      spec:
-        containers:
-        - image: argoproj/rollouts-demo:green
-          imagePullPolicy: Always
-          name: rollouts-demo
-          ports:
-          - containerPort: 8080
-            protocol: TCP
+    spec:
+      containers:
+      - name: rollouts-demo
+        image: argoproj/rollouts-demo:green
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          protocol: TCP
