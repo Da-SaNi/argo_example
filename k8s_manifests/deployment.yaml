@@ -4,7 +4,7 @@ kind: Rollout # Deployment 대신 Rollout을 사용한다.
 metadata:
   name: rollout-bluegreen
 spec:
-  replicas: 2
+  replicas: 4
   revisionHistoryLimit: 2
   selector:
     matchLabels:
