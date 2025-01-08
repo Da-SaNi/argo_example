@@ -19,9 +19,24 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
+          protocol: TCP
+        readinessProbe:  # 애플리케이션 상태 확인
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:  # Pod 상태 확인
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
   strategy:
     blueGreen: 
-      autoPromotionEnabled: false
+      autoPromotionEnabled: false  # 자동 전환 비활성화
       activeService: rollout-bluegreen-active
       previewService: rollout-bluegreen-preview
-      
+      previewReplicaCount: 2       # Preview에서 2개의 Pod 실행
+      scaleDownDelaySeconds: 30    # 이전 버전 삭제 대기 시간
+  abortOnFailure: true             # 헬스 체크 실패 시 자동 롤백
