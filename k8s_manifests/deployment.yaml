@@ -38,5 +38,4 @@ spec:
       activeService: rollout-bluegreen-active
       previewService: rollout-bluegreen-preview
       previewReplicaCount: 2       # Preview에서 2개의 Pod 실행
-      scaleDownDelaySeconds: 30    # 이전 버전 삭제 대기 시간
   abortOnFailure: true             # 헬스 체크 실패 시 자동 롤백
