@@ -15,23 +15,11 @@ spec:
     spec:
       containers:
       - name: rollouts-demo
-        image: argoproj/rollouts-demo:green
+        image: argoproj/rollouts-demo:blue
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
           protocol: TCP
-        readinessProbe:  # 애플리케이션 상태 확인
-          httpGet:
-            path: /
-            port: 8080
-          initialDelaySeconds: 5
-          periodSeconds: 5
-        livenessProbe:  # Pod 상태 확인
-          httpGet:
-            path: /health
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 10
   strategy:
     blueGreen: 
       autoPromotionEnabled: false  # 자동 전환 비활성화
