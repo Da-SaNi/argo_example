@@ -14,8 +14,26 @@ spec:
         app: rollout-bluegreen
     spec:
       containers:
-      - name: rollouts-demo
-        image: argoproj/rollouts-demo:greenn
+      - name: rollouts-demo-blue
+        image: argoproj/rollouts-demo:blue
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:  # 애플리케이션 상태 확인
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:  # Pod 상태 확인
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      - name: rollouts-demo-green
+        image: argoproj/rollouts-demo:green
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
